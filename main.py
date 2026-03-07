@@ -6,6 +6,8 @@ import requests
 import os
 
 discordToken = os.getenv("DISCORD_TOKEN")
+print(discordToken)
+exit()
 
 
 def getCard(searchString):
