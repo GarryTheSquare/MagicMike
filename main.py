@@ -1,9 +1,11 @@
 # This example requires the 'message_content' intent.
 
 import discord
-
 import json
 import requests
+import os
+
+discordToken = os.getenv("DISCORD_TOKEN")
 
 
 def getCard(searchString):
@@ -48,4 +50,4 @@ async def on_message(message):
         cardString = message.content[6:]
         await message.channel.send(getCard(cardString))
 
-client.run('MTQ3NzA2MDcyOTU5MTgyNDQ2NA.G_1rN2.VXQ6NQFKQE5cPr2KdLmuOJUyY3obIFjYBId3vE')
+client.run(discordToken)
