@@ -60,7 +60,7 @@ async def on_message(message):
         await message.channel.send(out)
 
     if message.content == "!about-me":
-        out +=	"I run on a Python library for Discord bots! I take your card names and run them through the Scryfall REST API to get all the info about the card, and then post the URL of that image to the discord server. Discord then displays that URL as an image!\n"
+        out =	"I run on a Python library for Discord bots! I take your card names and run them through the Scryfall REST API to get all the info about the card, and then post the URL of that image to the discord server. Discord then displays that URL as an image!\n"
         out +=	"\n"
         out +=	"I am hosted on a Cloud Computing Service called Railway that comes with a nice free tier of service hosting for small scripts like me. Hosting me costs about 1,6 cents per day, and this service does not bill you for the first euro per month.\n"
         out +=	"\n"
