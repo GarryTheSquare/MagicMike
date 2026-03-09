@@ -4,17 +4,37 @@ import discord
 import json
 import requests
 import os
+import re
 
 discordToken = os.getenv("DISCORD_TOKEN")
 
 def getCard(searchString):
     try:
+        cardSet, searchString = getSet(searchString)
+        if cardSet != None:
+            try:
+                url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString + "&set=" + cardSet
+                obj = requests.get(url)
+                JSONobj = json.loads(obj.content)
+                return JSONobj['image_uris']['normal']
+            except:
+                return "Could not find this card for set " + cardSet + ". Trying again without specifying the set\n" + getCard(searchString)
         url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString
         obj = requests.get(url)
         JSONobj = json.loads(obj.content)
         return JSONobj['image_uris']['normal']
     except: 
         return "Could not find card for (" + searchString + ")"
+    
+def getSet(s):
+    match = re.search(r'\(([A-Za-z]{3})\)', s)
+    
+    if match:
+        code = match.group(1)
+        cleaned = s[:match.start()] + s[match.end():]
+        return code, cleaned
+    
+    return None, s
 
 
 intents = discord.Intents.default()
@@ -51,12 +71,13 @@ async def on_message(message):
             await message.channel.send(getCard(s))
     
     if message.content == "!help":
-        out =   "Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n"
-        out +=  "`!card island` (for 1 card)\n"
-        out +=  "`!card island;mountain;swamp` (for multiple cards)\n"
-        out +=  "Or in any message, put brackets around the cardname like `I think of adding [[island]] or [[mountain]] to my deck`\n"
-        out +=  "\n"
-        out +=  "I try to correct typos as well as I can. If you want technical/programming info about how I work, type !about-me"
+        out =   """Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n
+        `!card island` (for 1 card)\n
+        `!card island;mountain;swamp` (for multiple cards)\n
+        `!card island (TLA)` You can also specify a specific printing by adding the set code inbetween brackets anywhere in the command.
+        Or in any message, put brackets around the cardname like `I think of adding [[island]] or [[mountain]] to my deck`\n
+        \n
+        I try to correct typos as well as I can. If you want technical/programming info about how I work, type !about-me"""
         await message.channel.send(out)
 
     if message.content == "!about-me":
