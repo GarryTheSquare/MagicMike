@@ -53,7 +53,7 @@ async def on_message(message):
     if message.content == "!help":
         out =   "Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n"
         out +=  "`!card island` (for 1 card)\n"
-        out +=  "!card island;mountain;swamp` (for multiple cards)\n"
+        out +=  "`!card island;mountain;swamp` (for multiple cards)\n"
         out +=  "Or in any message, put brackets around the cardname like `I think of adding [[island]] or [[mountain]] to my deck`\n"
         out +=  "\n"
         out +=  "I try to correct typos as well as I can. If you want technical/programming info about how I work, type !about-me"
