@@ -28,7 +28,7 @@ def getCard(searchString):
         return "Could not find card for (" + searchString + ")"
     
 def getSet(s):
-    match = re.search(r'\(([A-Za-z]{3})\)', s)
+    match = re.search(r'\(([A-Za-z0-9]{3})\)', s)
     
     if match:
         code = match.group(1)
