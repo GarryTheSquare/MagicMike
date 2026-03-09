@@ -14,6 +14,7 @@ def getCard(searchString):
         if cardSet != None:
             try:
                 url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString + "&set=" + cardSet
+                print(url)
                 obj = requests.get(url)
                 JSONobj = json.loads(obj.content)
                 return JSONobj['image_uris']['normal']
