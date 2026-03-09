@@ -51,16 +51,12 @@ async def on_message(message):
             await message.channel.send(getCard(s))
     
     if message.content == "!help":
-        out =   "Hi, I turn magic card names into images of those cards.\n"
-        out +=  "\n"
-        out +=  "If you would like me to post a picture of cards, you can:\n"
-        out +=  "!card island (for 1 card)\n"
+        out =   "Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n"
+        out +=  "`!card island (for 1 card)\n"
         out +=  "!card island;mountain;swamp (for multiple cards)\n"
-        out +=  "Or in any message, put brackets around the cardname like [[island]] or [[mountain]]\n"
+        out +=  "Or in any message, put brackets around the cardname like [[island]] or [[mountain]]`\n"
         out +=  "\n"
-        out +=  "I try to correct typos as well as I can\n"
-        out +=  "\n"
-        out +=  "If you want technical/programming info about how I work, type !about-me"
+        out +=  "I try to correct typos as well as I can. If you want technical/programming info about how I work, type !about-me"
         await message.channel.send(out)
 
     if message.content == "!about-me":
@@ -70,10 +66,10 @@ async def on_message(message):
         out +=	"\n"
         out +=	"Here is the link to my GitHub Repo and the mentioned resources:\n"
         out +=	"\n"
-        out +=	"GitHub Repo: (https://github.com/GarryTheSquare/MagicMike)\n"
+        out +=	"`GitHub Repo: (https://github.com/GarryTheSquare/MagicMike)\n"
         out +=	"Discord.py (https://discordpy.readthedocs.io/en/stable/)\n"
         out +=	"Scryfall REST API (https://scryfall.com/docs/api)\n"
-        out +=	"Railway Cloud Service (https://railway.com/)"
+        out +=	"Railway Cloud Service (https://railway.com/)`"
         await message.channel.send(out)
 
 client.run(discordToken)
