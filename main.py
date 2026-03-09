@@ -47,6 +47,33 @@ async def on_message(message):
 
     if message.content.startswith('!card '):
         cardString = message.content[6:]
-        await message.channel.send(getCard(cardString))
+        for s in cardString.split(';'):
+            await message.channel.send(getCard(s))
+    
+    if message.content == "!help":
+        out =   "Hi, I turn magic card names into images of those cards.\n"
+        out +=  "\n"
+        out +=  "If you would like me to post a picture of cards, you can:\n"
+        out +=  "!card island (for 1 card)\n"
+        out +=  "!card island;mountain;swamp (for multiple cards)\n"
+        out +=  "Or in any message, put brackets around the cardname like [[island]] or [[mountain]]\n"
+        out +=  "\n"
+        out +=  "I try to correct typos as well as I can\n"
+        out +=  "\n"
+        out +=  "If you want technical/programming info about how I work, type !about-me"
+        await message.channel.send(out)
+
+    if message.content == "!about-me":
+        out +=	"I run on a Python library for Discord bots! I take your card names and run them through the Scryfall REST API to get all the info about the card, and then post the URL of that image to the discord server. Discord then displays that URL as an image!\n"
+        out +=	"\n"
+        out +=	"I am hosted on a Cloud Computing Service called Railway that comes with a nice free tier of service hosting for small scripts like me. Hosting me costs about 1,6 cents per day, and this service does not bill you for the first euro per month.\n"
+        out +=	"\n"
+        out +=	"Here is the link to my GitHub Repo and the mentioned resources:\n"
+        out +=	"\n"
+        out +=	"GitHub Repo: (https://github.com/GarryTheSquare/MagicMike)\n"
+        out +=	"Discord.py (https://discordpy.readthedocs.io/en/stable/)\n"
+        out +=	"Scryfall REST API (https://scryfall.com/docs/api)\n"
+        out +=	"Railway Cloud Service (https://railway.com/)"
+        await message.channel.send(out)
 
 client.run(discordToken)
