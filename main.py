@@ -17,13 +17,13 @@ def getCard(searchString):
                 print(url)
                 obj = requests.get(url)
                 JSONobj = json.loads(obj.content)
-                return banChecK(JSONobj['legalities']) + JSONobj['image_uris']['normal']
+                return JSONobj['image_uris']['normal'], banChecK(JSONobj['legalities'])
             except:
                 return "Could not find this card for set " + cardSet + ". Trying again without specifying the set\n" + getCard(searchString)
         url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString
         obj = requests.get(url)
         JSONobj = json.loads(obj.content)
-        return banChecK(JSONobj['legalities']) + JSONobj['image_uris']['normal']
+        return JSONobj['image_uris']['normal'], banChecK(JSONobj['legalities'])
     except: 
         return "Could not find card for (" + searchString + ")"
     
@@ -72,12 +72,18 @@ async def on_message(message):
                 return
             c = c.split(']]')[0]
             header += c + ", "
-            await message.channel.send(getCard(c))
+            card, legalMsg = getCard(c)
+            if (len(legalMsg) > 0):
+                await message.channel.send(legalMsg)
+            await message.channel.send(card)
 
     if message.content.startswith('!card '):
         cardString = message.content[6:]
         for s in cardString.split(';'):
-            await message.channel.send(getCard(s))
+            card, legalMsg = getCard(c)
+            if (len(legalMsg) > 0):
+                await message.channel.send(legalMsg)
+            await message.channel.send(card)
     
     if message.content == "!help mtg":
         out =   """Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n
