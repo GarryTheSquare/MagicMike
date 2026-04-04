@@ -23,7 +23,7 @@ def getCard(searchString):
         url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString
         obj = requests.get(url)
         JSONobj = json.loads(obj.content)
-        return JSONobj['image_uris']['normal'], banChecK(JSONobj['legalities'])
+        return JSONobj['image_uris']['normal'], banChecK(JSONobj)
     except: 
         return "Could not find card for (" + searchString + ")"
     
