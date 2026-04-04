@@ -17,16 +17,24 @@ def getCard(searchString):
                 print(url)
                 obj = requests.get(url)
                 JSONobj = json.loads(obj.content)
-                return JSONobj['image_uris']['normal']
+                return banChecK(JSONobj['legalities']) + JSONobj['image_uris']['normal']
             except:
                 return "Could not find this card for set " + cardSet + ". Trying again without specifying the set\n" + getCard(searchString)
         url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString
         obj = requests.get(url)
         JSONobj = json.loads(obj.content)
-        return JSONobj['image_uris']['normal']
+        return banChecK(JSONobj['legalities']) + JSONobj['image_uris']['normal']
     except: 
         return "Could not find card for (" + searchString + ")"
     
+def banChecK(card):
+    out = ""
+    if (card['commander'] !="legal"):
+        out += "Legality for commander: " + card['commander'] + '\n'
+    if (card['standard'] !="legal"):
+        out += "Legality for standard: " + card['commander'] + '\n'
+    return out
+
 def getSet(s):
     match = re.search(r'\(([A-Za-z0-9]{3})\)', s)
     
