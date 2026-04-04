@@ -29,8 +29,8 @@ def getCard(searchString):
     
 def banChecK(card):
     out = ""
-    if (card['commander'] !="legal"):
-        out += "Legality for commander: " + card['commander'] + '\n'
+    #if (card['commander'] !="legal"):
+    #    out += "Legality for commander: " + card['commander'] + '\n'
     if (card['standard'] !="legal"):
         out += "Legality for standard: " + card['commander'] + '\n'
     return out
