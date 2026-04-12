@@ -6,9 +6,26 @@ import requests
 import os
 import re
 
-discordToken = os.getenv("DISCORD_TOKEN")
+discordToken = "TOKEN"
 
-def getCard(searchString):
+def CardRequest(searchString): 
+
+    outStrings = []
+    obj, succes = getJSON(searchString)
+    if not succes:
+        outStrings.append("Could not find a card for " + searchString)
+        return outStrings
+    banMessage = banChecK(obj)
+    if banMessage is not None:
+        outStrings.append(banMessage)
+    if obj['card_faces'] is None:
+        outStrings.append(obj['image_uris']['normal'])
+    else:
+        for face in obj['card_faces']:
+            outStrings.append(face['image_uris']['normal'])
+    return outStrings
+
+def getJSON(searchString):
     try:
         cardSet, searchString = getSet(searchString)
         if cardSet != None:
@@ -16,24 +33,20 @@ def getCard(searchString):
                 url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString + "&set=" + cardSet
                 print(url)
                 obj = requests.get(url)
-                JSONobj = json.loads(obj.content)
-                return JSONobj['image_uris']['normal'], banChecK(JSONobj)
+                return json.loads(obj.content), True
             except:
-                return "Could not find this card for set " + cardSet + ". Trying again without specifying the set\n" + getCard(searchString)
+                return "Could not find this card for set " + cardSet + ". Trying again without specifying the set\n" + getJSON(searchString)
         url = "https://api.scryfall.com/cards/named?fuzzy=" + searchString
+        print(url)
         obj = requests.get(url)
-        JSONobj = json.loads(obj.content)
-        return JSONobj['image_uris']['normal'], banChecK(JSONobj)
+        return json.loads(obj.content), True
     except: 
-        return "Could not find card for (" + searchString + ")"
+        return None, False
     
 def banChecK(card):
-    out = ""
     if (card['legalities']['commander'] !="legal"):
-        out += card['name'] + " is " + card['legalities']['commander'] + " for commander" + '\n'
-    #if (card['standard'] !="legal"):
-    #    out += "Legality for standard: " + card['commander'] + '\n'
-    return out
+        return card['name'] + " is " + card['legalities']['commander'] + " for commander" + '\n'
+    return None
 
 def getSet(s):
     match = re.search(r'\(([A-Za-z0-9]{3})\)', s)
@@ -72,18 +85,14 @@ async def on_message(message):
                 return
             c = c.split(']]')[0]
             header += c + ", "
-            card, legalMsg = getCard(c)
-            await message.channel.send(card)
-            if (len(legalMsg) > 0):
-                await message.channel.send(legalMsg)
+            for s in CardRequest(c):
+                await message.channel.send(s)
 
     if message.content.startswith('!card '):
         cardString = message.content[6:]
         for s in cardString.split(';'):
-            card, legalMsg = getCard(c)
-            await message.channel.send(card)
-            if (len(legalMsg) > 0):
-                await message.channel.send(legalMsg)
+            for s in CardRequest(c):
+                await message.channel.send(s)
     
     if message.content == "!help mtg":
         out =   """Hi, I turn magic card names into images of those cards. If you would like me to post a picture of cards, you can:\n
