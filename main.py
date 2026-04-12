@@ -18,11 +18,11 @@ def CardRequest(searchString):
     banMessage = banChecK(obj)
     if banMessage is not None:
         outStrings.append(banMessage)
-    if obj['card_faces'] is None:
-        outStrings.append(obj['image_uris']['normal'])
-    else:
+    try:
         for face in obj['card_faces']:
             outStrings.append(face['image_uris']['normal'])
+    except:
+        outStrings.append(obj['image_uris']['normal'])
     return outStrings
 
 def getJSON(searchString):
@@ -114,7 +114,7 @@ async def on_message(message):
         out +=	"`GitHub Repo: (https://github.com/GarryTheSquare/MagicMike)\n"
         out +=	"Discord.py (https://discordpy.readthedocs.io/en/stable/)\n"
         out +=	"Scryfall REST API (https://scryfall.com/docs/api)\n"
-        out +=	"Railway Cloud Service (https://railway.com/)`"
+        out +=	"AWS EC2 (https://aws.amazon.com/ec2/)`"
         await message.channel.send(out)
 
 client.run(discordToken)
